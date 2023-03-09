@@ -1,0 +1,19 @@
+{
+  "names": {
+    "synz": "6d255dc3a77ecb5102092df7e09ff69c92dcf0f50233a2119c88df119f6567de"
+  },
+  "relays": {
+    "6d255dc3a77ecb5102092df7e09ff69c92dcf0f50233a2119c88df119f6567de": [
+      "wss://relay.nostr.band",
+      "wss://relay.nostr.info",
+      "wss://relay.snort.social",
+      "wss://relay.damus.io",
+      "wss://relay.plebstr.com",
+      "wss://relay.mostr.pub",
+      "wss://relay.current.fyi",
+      "wss://offchain.pub",
+      "wss://brb.io",
+      "wss://nos.lol"
+    ]
+  }
+}
