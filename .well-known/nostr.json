@@ -1,9 +1,9 @@
 {
   "names": {
-    "synz": "6d255dc3a77ecb5102092df7e09ff69c92dcf0f50233a2119c88df119f6567de"
+    "synz": "81262cc1a745c04a225719e783efc51d731a11564f6ccf9c72efddcf4be98246"
   },
   "relays": {
-    "6d255dc3a77ecb5102092df7e09ff69c92dcf0f50233a2119c88df119f6567de": [
+    "81262cc1a745c04a225719e783efc51d731a11564f6ccf9c72efddcf4be98246": [
       "wss://relay.nostr.band",
       "wss://relay.nostr.info",
       "wss://relay.snort.social",
