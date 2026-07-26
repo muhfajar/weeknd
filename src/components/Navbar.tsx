@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {Terminal, Plus, Github, Search, Menu, X, Sun, Moon} from 'lucide-react';
 
 interface NavbarProps {
-    onNavigate: (tab: 'home' | 'apps' | 'submit') => void;
+    onNavigate: (tab: 'home' | 'apps' | 'dev' | 'submit') => void;
+    currentTab?: 'home' | 'apps' | 'dev' | 'submit';
     onFocusSearch?: () => void;
     theme?: 'dark' | 'light';
     onToggleTheme?: () => void;
@@ -10,13 +11,14 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
                                                   onNavigate,
+                                                  currentTab = 'home',
                                                   onFocusSearch,
                                                   theme = 'dark',
                                                   onToggleTheme,
                                               }) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const handleNavClick = (tab: 'home' | 'apps' | 'submit') => {
+    const handleNavClick = (tab: 'home' | 'apps' | 'dev' | 'submit') => {
         onNavigate(tab);
         setMobileMenuOpen(false);
     };
@@ -27,7 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="flex items-center justify-between h-16">
 
                     {/* Brand Logo & Tagline */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-6">
                         <button
                             onClick={() => handleNavClick('home')}
                             className="group flex items-center gap-2.5 text-left focus:outline-none"
@@ -44,6 +46,38 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
                             </div>
                         </button>
+
+                        {/* Desktop Nav Links */}
+                        <nav className="hidden md:flex items-center gap-1 font-mono text-xs">
+                            <button
+                                onClick={() => handleNavClick('apps')}
+                                className={`px-3 py-1.5 rounded-lg transition-colors font-medium ${
+                                    currentTab === 'home' || currentTab === 'apps'
+                                        ? theme === 'light'
+                                            ? 'text-zinc-900 bg-zinc-200 border border-zinc-300 font-semibold'
+                                            : 'text-white bg-[#1a1a1a] border border-[#2a2a2a] font-semibold'
+                                        : theme === 'light'
+                                            ? 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                                            : 'text-[#888888] hover:text-white hover:bg-[#141414]'
+                                }`}
+                            >
+                                /apps
+                            </button>
+                            <button
+                                onClick={() => handleNavClick('dev')}
+                                className={`px-3 py-1.5 rounded-lg transition-colors font-medium ${
+                                    currentTab === 'dev'
+                                        ? theme === 'light'
+                                            ? 'text-zinc-900 bg-zinc-200 border border-zinc-300 font-semibold'
+                                            : 'text-white bg-[#1a1a1a] border border-[#2a2a2a] font-semibold'
+                                        : theme === 'light'
+                                            ? 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                                            : 'text-[#888888] hover:text-white hover:bg-[#141414]'
+                                }`}
+                            >
+                                /dev
+                            </button>
+                        </nav>
                     </div>
 
                     {/* Right Actions */}
@@ -135,14 +169,51 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Dropdown Menu */}
             {mobileMenuOpen && (
-                <div className="sm:hidden border-b border-zinc-800 bg-zinc-950 px-4 pt-3 pb-5 space-y-2">
+                <div className={`sm:hidden border-b px-4 pt-3 pb-5 space-y-2 ${
+                    theme === 'light'
+                        ? 'border-zinc-200 bg-white text-zinc-900'
+                        : 'border-zinc-800 bg-zinc-950 text-zinc-300'
+                }`}>
+                    <button
+                        onClick={() => handleNavClick('apps')}
+                        className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between transition-colors ${
+                            currentTab === 'home' || currentTab === 'apps'
+                                ? theme === 'light'
+                                    ? 'bg-zinc-200 text-zinc-900 font-semibold'
+                                    : 'bg-zinc-900 text-white font-semibold'
+                                : theme === 'light'
+                                    ? 'text-zinc-700 hover:bg-zinc-100'
+                                    : 'text-zinc-300 hover:bg-zinc-900'
+                        }`}
+                    >
+                        <span>/apps (Directory)</span>
+                    </button>
+
+                    <button
+                        onClick={() => handleNavClick('dev')}
+                        className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between transition-colors ${
+                            currentTab === 'dev'
+                                ? theme === 'light'
+                                    ? 'bg-zinc-200 text-zinc-900 font-semibold'
+                                    : 'bg-zinc-900 text-white font-semibold'
+                                : theme === 'light'
+                                    ? 'text-zinc-700 hover:bg-zinc-100'
+                                    : 'text-zinc-300 hover:bg-zinc-900'
+                        }`}
+                    >
+                        <span>/dev (Developers)</span>
+                    </button>
 
                     {onToggleTheme && (
                         <button
                             onClick={() => {
                                 onToggleTheme();
                             }}
-                            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between text-zinc-300 hover:bg-zinc-900"
+                            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between transition-colors ${
+                                theme === 'light'
+                                    ? 'text-zinc-700 hover:bg-zinc-100'
+                                    : 'text-zinc-300 hover:bg-zinc-900'
+                            }`}
                         >
                             <span>Switch to {theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
                             {theme === 'dark' ? (
@@ -155,10 +226,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                     <button
                         onClick={() => handleNavClick('submit')}
-                        className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between text-zinc-300 hover:bg-zinc-900"
+                        className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-mono flex items-center justify-between transition-colors ${
+                            theme === 'light'
+                                ? 'text-zinc-700 hover:bg-zinc-100'
+                                : 'text-zinc-300 hover:bg-zinc-900'
+                        }`}
                     >
-                        <span>Github</span>
-                        <Github className="w-4 h-4 text-zinc-400"/>
+                        <span>Submit App</span>
+                        <Plus className="w-4 h-4 text-red-500"/>
                     </button>
 
                 </div>

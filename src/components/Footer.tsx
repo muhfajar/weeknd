@@ -2,7 +2,7 @@ import React from 'react';
 import {Terminal, Heart} from 'lucide-react';
 
 interface FooterProps {
-    onNavigate?: (tab: 'home' | 'apps' | 'submit') => void;
+    onNavigate?: (tab: 'home' | 'apps' | 'dev' | 'submit') => void;
 }
 
 export const Footer: React.FC<FooterProps> = () => {
