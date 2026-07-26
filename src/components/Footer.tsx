@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = () => {
                 {/* Bottom Credits */}
                 <div
                     className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-[#666666]">
-                    <p>© {new Date().getFullYear()} weeknd.dev. Open source under MIT License.</p>
+                    <p>© {new Date().getFullYear()} weeknd.dev. Open source under <a href="https://github.com/muhfajar/weeknd/blob/master/LICENSE.md" target="_blank">MIT License</a>.</p>
                     <p className="text-center sm:text-right leading-relaxed">
                         Built with <Heart
                         className="inline-block w-3 h-3 text-red-500 fill-red-500 align-[-1px] mx-0.5"/> by fellow
