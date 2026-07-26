@@ -1,5 +1,6 @@
 import {load} from 'js-yaml';
 import {DeveloperFrontmatter, DeveloperItem} from '../types/developer';
+import {AppItem} from '../types/app';
 
 // Eagerly import all .md files in the /dev directory
 const devMarkdownFiles = import.meta.glob('/dev/*.md', {query: '?raw', eager: true});
@@ -77,3 +78,35 @@ export function getDeveloperBySlug(slug: string): DeveloperItem | undefined {
     const developers = getAllDevelopers();
     return developers.find((d) => d.slug.toLowerCase() === cleanSlug);
 }
+
+export function getAppsForDeveloper(developer: DeveloperItem, apps: AppItem[]): AppItem[] {
+    if (!developer || !apps || !apps.length) return [];
+
+    const devSlug = developer.slug.toLowerCase().trim();
+
+    return apps.filter((a) => {
+        if (a.linked_profile) {
+            const cleanLinked = a.linked_profile
+                .toLowerCase()
+                .trim()
+                .replace(/^https?:\/\/[^\/]+\/?/, '')
+                .replace(/^\/?dev\//, '')
+                .replace(/\/$/, '');
+            if (cleanLinked === devSlug) return true;
+        }
+
+        const devUrl = a.developer_url || a.developerUrl;
+        if (devUrl) {
+            const cleanDevUrl = devUrl
+                .toLowerCase()
+                .trim()
+                .replace(/^https?:\/\/[^\/]+\/?/, '')
+                .replace(/^\/?dev\//, '')
+                .replace(/\/$/, '');
+            if (cleanDevUrl === devSlug) return true;
+        }
+
+        return false;
+    });
+}
+

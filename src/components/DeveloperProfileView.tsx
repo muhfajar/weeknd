@@ -12,6 +12,7 @@ import {DeveloperItem} from '../types/developer';
 import {AppItem} from '../types/app';
 import {AppCard} from './AppCard';
 import {MarkdownRenderer} from './MarkdownRenderer';
+import {getAppsForDeveloper} from '../lib/developers';
 
 interface DeveloperProfileViewProps {
     developer: DeveloperItem;
@@ -32,13 +33,8 @@ export const DeveloperProfileView: React.FC<DeveloperProfileViewProps> = ({
                                                                           }) => {
     const [copied, setCopied] = React.useState(false);
 
-    // Filter apps created by or linked to this developer
-    const devApps = apps.filter(
-        (a) =>
-            (a.linked_profile && a.linked_profile.toLowerCase() === developer.slug.toLowerCase()) ||
-            a.developer.toLowerCase().includes(developer.name.toLowerCase()) ||
-            developer.name.toLowerCase().includes(a.developer.toLowerCase())
-    );
+    // Filter apps created by or linked to this developer dynamically
+    const devApps = getAppsForDeveloper(developer, apps);
 
     const handleShare = () => {
         const url = window.location.href;

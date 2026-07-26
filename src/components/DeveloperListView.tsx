@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Search, Users, ExternalLink, ArrowRight, Globe} from 'lucide-react';
 import {DeveloperItem} from '../types/developer';
 import {AppItem} from '../types/app';
+import {getAppsForDeveloper} from '../lib/developers';
 
 interface DeveloperListViewProps {
     developers: DeveloperItem[];
@@ -31,8 +32,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
             {/* Page Header */}
             <div className="space-y-4 border-b border-[#262626] pb-8">
                 <div className="flex items-center gap-2">
-                    <span
-                        className="text-[10px] font-mono tracking-widest text-red-400 uppercase px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20">
+                    <span className="text-[10px] font-mono tracking-widest text-red-400 uppercase px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20">
                         Indie Creators
                     </span>
                 </div>
@@ -46,7 +46,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                 {/* Search Bar */}
                 <div className="pt-2 max-w-md">
                     <div className="relative">
-                        <Search className="w-4 h-4 text-[#666666] absolute left-3.5 top-1/2 -translate-y-1/2"/>
+                        <Search className="w-4 h-4 text-[#666666] absolute left-3.5 top-1/2 -translate-y-1/2" />
                         <input
                             type="text"
                             value={searchQuery}
@@ -62,12 +62,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
             {filtered.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                     {filtered.map((dev) => {
-                        const devApps = apps.filter(
-                            (a) =>
-                                (a.linked_profile && a.linked_profile.toLowerCase() === dev.slug.toLowerCase()) ||
-                                a.developer.toLowerCase().includes(dev.name.toLowerCase()) ||
-                                dev.name.toLowerCase().includes(a.developer.toLowerCase())
-                        );
+                        const devApps = getAppsForDeveloper(dev, apps);
 
                         return (
                             <div
@@ -85,8 +80,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                                                     className="w-12 h-12 rounded-xl object-cover border border-[#262626]"
                                                 />
                                             ) : (
-                                                <div
-                                                    className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500/20 to-zinc-800 border border-red-500/30 flex items-center justify-center text-red-400 font-mono font-bold text-lg shadow-sm">
+                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500/20 to-zinc-800 border border-red-500/30 flex items-center justify-center text-red-400 font-mono font-bold text-lg shadow-sm">
                                                     {dev.name.slice(0, 2).toUpperCase()}
                                                 </div>
                                             )}
@@ -101,9 +95,8 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                                             </div>
                                         </div>
 
-                                        <div
-                                            className="p-2 rounded-xl bg-[#0A0A0A] border border-[#262626] text-[#666666] group-hover:text-white group-hover:border-red-500/40 transition-all">
-                                            <ArrowRight className="w-4 h-4"/>
+                                        <div className="p-2 rounded-xl bg-[#0A0A0A] border border-[#262626] text-[#666666] group-hover:text-white group-hover:border-red-500/40 transition-all">
+                                            <ArrowRight className="w-4 h-4" />
                                         </div>
                                     </div>
 
@@ -114,17 +107,15 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                                     )}
                                 </div>
 
-                                <div
-                                    className="pt-4 border-t border-[#262626] flex items-center justify-between text-xs font-mono text-[#888888]">
+                                <div className="pt-4 border-t border-[#262626] flex items-center justify-between text-xs font-mono text-[#888888]">
                                     <span className="inline-flex items-center gap-1.5 text-zinc-300">
-                                        <span className="w-2 h-2 rounded-full bg-red-500"/>
+                                        <span className="w-2 h-2 rounded-full bg-red-500" />
                                         {devApps.length} {devApps.length === 1 ? 'App' : 'Apps'}
                                     </span>
 
                                     {dev.website && (
-                                        <span
-                                            className="inline-flex items-center gap-1 hover:text-white transition-colors">
-                                            <Globe className="w-3.5 h-3.5"/>
+                                        <span className="inline-flex items-center gap-1 hover:text-white transition-colors">
+                                            <Globe className="w-3.5 h-3.5" />
                                             <span>Website</span>
                                         </span>
                                     )}
@@ -135,7 +126,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                 </div>
             ) : (
                 <div className="bg-[#141414] border border-[#262626] rounded-2xl p-12 text-center space-y-3">
-                    <Users className="w-8 h-8 text-[#666666] mx-auto"/>
+                    <Users className="w-8 h-8 text-[#666666] mx-auto" />
                     <h3 className="text-sm font-mono text-white">No developers found</h3>
                     <p className="text-xs font-mono text-[#888888]">
                         Try searching with a different keyword.

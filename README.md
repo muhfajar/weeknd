@@ -129,6 +129,7 @@ mastodon: https://mastodon.social/@username
 nostr: https://primal.net/p/nprofileUsername 
 bluesky: https://bsky.app/profile/username.bsky.social 
 linkedin: https://www.linkedin.com/in/username/ 
+github: https://github.com/username
 ---
 
 ### About
