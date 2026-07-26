@@ -1,5 +1,32 @@
 # weeknd.dev
 
+A curated directory of indie software, built by makers for makers.
+
+## What is this?
+
+weeknd.dev collects indie-built apps into a searchable, filterable directory. Each app lives as a markdown file in `apps/` — add a file, the directory updates. No database, no API, no build pipeline for content.
+
+## Tech Stack
+
+- **React 19** + **TypeScript 5.8**
+- **Vite 6** — dev server + build
+- **Tailwind CSS 4** — styling via `@tailwindcss/vite`
+- **react-markdown** — renders app descriptions
+- **js-yaml** — parses YAML frontmatter
+- **lucide-react** — icons
+- **motion** — animations
+
+## Features
+
+- Search by name, developer, or description
+- Filter by platform (web, iOS, Android, macOS, Windows, Linux)
+- Filter by category (AI, Productivity, Travel, etc.)
+- Sort by newest or alphabetical
+- Pagination with configurable page size
+- Deep-linkable app detail views (`?app=slug`)
+- Theme toggle with localStorage persistence
+- Submit app workflow — generates PR-ready markdown
+
 ## How to Contribute
 
 ### Adding an App
