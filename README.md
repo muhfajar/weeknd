@@ -27,6 +27,51 @@ weeknd.dev collects indie-built apps into a searchable, filterable directory. Ea
 - Theme toggle with localStorage persistence
 - Submit app workflow — generates PR-ready markdown
 
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Setup
+
+```bash
+git clone https://github.com/your-username/weeknd.git
+cd weeknd
+npm install
+```
+
+### Commands
+
+```bash
+npm run dev      # Start dev server at localhost:3000
+npm run build    # Production build to dist/
+npm run preview  # Preview production build
+npm run lint     # TypeScript type check
+```
+
+## Project Structure
+
+```
+weeknd/
+├── apps/                  # App listings (one markdown file each)
+│   ├── _featured.md       # Featured app slugs
+│   ├── ooo-club.md
+│   ├── typedream.md
+│   └── ...
+├── src/
+│   ├── components/        # UI components
+│   ├── lib/               # Markdown parsing, app catalog logic
+│   ├── types/             # TypeScript types
+│   ├── App.tsx            # App shell
+│   └── main.tsx           # Entry point
+├── index.html
+├── package.json
+├── vite.config.ts
+└── tsconfig.json
+```
+
 ## How to Contribute
 
 ### Adding an App
