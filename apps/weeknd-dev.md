@@ -5,7 +5,7 @@ developer: Fajar
 website: https://weeknd.dev
 platform: web
 category: Social 
-icon: https://weeknd.dev/android-chrome-144x144.png 
+icon: https://cdn.weeknd.dev/pub/img/weeknd/weeknd-dev.png 
 screenshots:
   - https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80
 developer_url: https://github.com/muhfajar/weeknd 
