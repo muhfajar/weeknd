@@ -1,4 +1,5 @@
-# weeknd
+# weeknd.dev
+
 ## How to Contribute
 
 ### Adding an App
