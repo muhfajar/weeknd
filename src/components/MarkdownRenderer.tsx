@@ -15,12 +15,12 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
                                                                       justify = true,
                                                                   }) => {
     return (
-        <div className={`prose prose-invert max-w-none font-sans ${justify ? 'text-justify' : ''} ${className}`}>
+        <div className={`prose prose-invert max-w-none font-mono ${justify ? 'text-justify' : ''} ${className}`}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 components={{
                     p: ({node, children, ...props}) => (
-                        <p className={`text-sm font-sans font-normal text-zinc-300 leading-relaxed my-2.5 ${justify ? 'text-justify' : ''}`} {...props}>
+                        <p className={`text-sm font-mono font-normal text-zinc-300 leading-relaxed my-2.5 ${justify ? 'text-justify' : ''}`} {...props}>
                             {children}
                         </p>
                     ),

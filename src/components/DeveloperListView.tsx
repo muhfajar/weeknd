@@ -39,8 +39,8 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                 <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-mono">
                     Developers on weeknd.dev
                 </h1>
-                <p className="text-sm font-sans text-zinc-300 max-w-2xl leading-relaxed">
-                    Meet the independent makers, designers, and engineers crafting software on weekends.
+                <p className="text-sm font-mono text-zinc-300 max-w-4xl leading-relaxed">
+                    Meet the independent makers, designers, and engineers crafting software on [mostly] weekends.
                 </p>
 
                 {/* Search Bar */}
@@ -101,7 +101,7 @@ export const DeveloperListView: React.FC<DeveloperListViewProps> = ({
                                     </div>
 
                                     {dev.bio && (
-                                        <p className="text-xs font-sans text-zinc-300 line-clamp-2 leading-relaxed">
+                                        <p className="text-xs font-mono text-zinc-300 line-clamp-2 leading-relaxed">
                                             {dev.bio}
                                         </p>
                                     )}
