@@ -8,6 +8,9 @@ category: Social
 icon: https://cdn.weeknd.dev/pub/img/weeknd/logo.png 
 screenshots:
   - https://cdn.weeknd.dev/pub/img/weeknd/weeknd_dev_main.jpeg
+  - https://cdn.weeknd.dev/pub/img/weeknd/weeknd_dev_modal.jpeg
+  - https://cdn.weeknd.dev/pub/img/weeknd/weeknd_dev_profile.jpeg
+  - https://cdn.weeknd.dev/pub/img/weeknd/weeknd_dev_submit.jpeg
 developer_url: https://github.com/muhfajar/weeknd 
 linked_profile: muhfajar
 twitter:
