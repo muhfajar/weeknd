@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import ReactMarkdown from 'react-markdown';
 import {
     X,
     ExternalLink,
@@ -15,14 +14,16 @@ import {
 } from 'lucide-react';
 import {motion, AnimatePresence} from 'motion/react';
 import {AppItem} from '../types/app';
+import {MarkdownRenderer} from './MarkdownRenderer';
 
 interface AppDetailModalProps {
     app: AppItem | null;
     onClose: () => void;
     onShowToast: (msg: string) => void;
+    onSelectDeveloperBySlug?: (slug: string) => void;
 }
 
-export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onShowToast}) => {
+export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onShowToast, onSelectDeveloperBySlug}) => {
     const [activeTab, setActiveTab] = useState<'details' | 'raw'>('details');
     const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
     const [copiedLink, setCopiedLink] = useState(false);
@@ -68,7 +69,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                     animate={{opacity: 1, scale: 1, y: 0}}
                     exit={{opacity: 0, scale: 0.96, y: 10}}
                     transition={{duration: 0.2}}
-                    className="relative w-full max-w-3xl bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col"
+                    className="relative w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col"
                 >
                     {/* Header Bar */}
                     <div
@@ -224,35 +225,60 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                 )}
 
                                 {/* Markdown Body Description */}
-                                <div className="space-y-3 pt-2">
+                                <div className="space-y-2 pt-2">
                                     <h4 className="text-xs font-mono font-semibold text-[#888888] uppercase tracking-wider">
                                         About {app.name}
                                     </h4>
-                                    <div
-                                        className="p-4 sm:p-5 rounded-xl bg-[#0A0A0A] border border-[#262626] text-sm font-mono text-zinc-300 leading-relaxed prose prose-invert max-w-none prose-headings:font-mono prose-headings:text-white prose-a:text-red-400 prose-code:text-red-300 prose-code:bg-[#1A1A1A] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded">
-                                        <ReactMarkdown>{app.content}</ReactMarkdown>
-                                    </div>
+                                    <MarkdownRenderer content={app.content} justify={true} />
                                 </div>
 
-                                {/* Creator Link Footer */}
+                                {/* Developer Link Footer */}
                                 <div
                                     className="pt-4 border-t border-[#262626] flex items-center justify-between gap-3 text-xs font-mono">
-                                    {app.creator_link || app.developerUrl ? (
-                                        <a
-                                            href={app.creator_link || app.developerUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-1.5 text-[#888888] hover:text-white transition-colors"
-                                            title="Creator's personal website, social profile, or portfolio"
-                                        >
-                                            <User className="w-3.5 h-3.5 text-red-400"/>
-                                            <span>Created by <strong className="text-zinc-200">{app.developer}</strong></span>
-                                            <ExternalLink className="w-3 h-3 text-[#666666]"/>
-                                        </a>
-                                    ) : (
-                                        <span className="text-[#888888]">Created by <strong
-                                            className="text-zinc-200">{app.developer}</strong></span>
-                                    )}
+                                    {(() => {
+                                        const devRef = app.linked_profile || app.developerUrl || app.developer_url;
+                                        if (!devRef) {
+                                            return (
+                                                <span className="text-[#888888]">Created by <strong className="text-zinc-200">{app.developer}</strong></span>
+                                            );
+                                        }
+
+                                        const isExternalUrl = devRef.startsWith('http://') || devRef.startsWith('https://') || devRef.startsWith('mailto:');
+
+                                        if (!isExternalUrl) {
+                                            const slug = devRef.replace(/^\/dev\//, '').replace(/^dev\//, '');
+                                            return (
+                                                <button
+                                                    onClick={() => {
+                                                        if (onSelectDeveloperBySlug) {
+                                                            onSelectDeveloperBySlug(slug);
+                                                        } else {
+                                                            window.location.href = `/#/${slug}`;
+                                                        }
+                                                    }}
+                                                    className="flex items-center gap-1.5 text-[#888888] hover:text-white transition-colors cursor-pointer"
+                                                    title={`View ${app.developer}'s profile on weeknd.dev`}
+                                                >
+                                                    <User className="w-3.5 h-3.5 text-red-400"/>
+                                                    <span>Created by <strong className="text-zinc-200 underline decoration-red-500/40 hover:decoration-red-400">{app.developer}</strong></span>
+                                                </button>
+                                            );
+                                        }
+
+                                        return (
+                                            <a
+                                                href={devRef}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex items-center gap-1.5 text-[#888888] hover:text-white transition-colors"
+                                                title="Developer's personal website or social profile"
+                                            >
+                                                <User className="w-3.5 h-3.5 text-red-400"/>
+                                                <span>Created by <strong className="text-zinc-200">{app.developer}</strong></span>
+                                                <ExternalLink className="w-3 h-3 text-[#666666]"/>
+                                            </a>
+                                        );
+                                    })()}
                                 </div>
                             </>
                         ) : (
