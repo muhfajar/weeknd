@@ -112,8 +112,10 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                         {activeTab === 'details' ? (
                             <>
                                 {/* Hero / Header info */}
-                                <div className="flex flex-col sm:flex-row items-start gap-4 pb-6 border-b border-[#262626]">
-                                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#1E1E1E] border border-[#333333] overflow-hidden flex items-center justify-center shrink-0">
+                                <div
+                                    className="flex flex-col sm:flex-row items-start gap-4 pb-6 border-b border-[#262626]">
+                                    <div
+                                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#1E1E1E] border border-[#333333] overflow-hidden flex items-center justify-center shrink-0">
                                         {app.icon ? (
                                             <img src={app.icon} alt={app.name} className="w-full h-full object-cover"/>
                                         ) : (
@@ -129,8 +131,9 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                                 {app.name}
                                             </h2>
                                             {app.featured && (
-                                                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-400/10 text-amber-300 border border-amber-400/30 flex items-center gap-1">
-                                                    <Star className="w-3 h-3 fill-amber-400"/> Featured
+                                                <span
+                                                    className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-300/10 text-amber-500 border border-amber-400/30 flex items-center gap-1">
+                                                    <Star className="w-3 h-3 fill-amber-500"/> Featured
                                                 </span>
                                             )}
                                         </div>
@@ -140,11 +143,14 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                         </p>
 
                                         {/* Category & Platform */}
-                                        <div className="flex items-center gap-2 mt-2.5 text-xs font-mono text-[#666666]">
-                                            <span className="px-2 py-0.5 rounded bg-[#1E1E1E] text-zinc-300 border border-[#333333]">
+                                        <div
+                                            className="flex items-center gap-2 mt-2.5 text-xs font-mono text-[#666666]">
+                                            <span
+                                                className="px-2 py-0.5 rounded bg-[#1E1E1E] text-zinc-300 border border-[#333333]">
                                                 {app.category}
                                             </span>
-                                            <span className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
+                                            <span
+                                                className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
                                                 {app.platform}
                                             </span>
                                         </div>
@@ -229,7 +235,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                     <h4 className="text-xs font-mono font-semibold text-[#888888] uppercase tracking-wider">
                                         About {app.name}
                                     </h4>
-                                    <MarkdownRenderer content={app.content} justify={true} />
+                                    <MarkdownRenderer content={app.content} justify={true}/>
                                 </div>
 
                                 {/* Developer Link Footer */}
@@ -239,7 +245,8 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                         const devRef = app.linked_profile || app.developerUrl || app.developer_url;
                                         if (!devRef) {
                                             return (
-                                                <span className="text-[#888888]">Created by <strong className="text-zinc-200">{app.developer}</strong></span>
+                                                <span className="text-[#888888]">Created by <strong
+                                                    className="text-zinc-200">{app.developer}</strong></span>
                                             );
                                         }
 
@@ -260,7 +267,8 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                                     title={`View ${app.developer}'s profile on weeknd.dev`}
                                                 >
                                                     <User className="w-3.5 h-3.5 text-red-400"/>
-                                                    <span>Created by <strong className="text-zinc-200 underline decoration-red-500/40 hover:decoration-red-400">{app.developer}</strong></span>
+                                                    <span>Created by <strong
+                                                        className="text-zinc-200 underline decoration-red-500/40 hover:decoration-red-400">{app.developer}</strong></span>
                                                 </button>
                                             );
                                         }
@@ -274,7 +282,8 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                                 title="Developer's personal website or social profile"
                                             >
                                                 <User className="w-3.5 h-3.5 text-red-400"/>
-                                                <span>Created by <strong className="text-zinc-200">{app.developer}</strong></span>
+                                                <span>Created by <strong
+                                                    className="text-zinc-200">{app.developer}</strong></span>
                                                 <ExternalLink className="w-3 h-3 text-[#666666]"/>
                                             </a>
                                         );
