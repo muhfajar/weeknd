@@ -108,6 +108,36 @@ Describe your app in a few sentences.
 - **Feature Two**: Description
 ```
 
+Example file for app live in `apps/weeknd-dev.md`
+
+### Adding a developer profile
+
+1. Fork the repo
+2. Create a new markdown file in `dev/` named after your name/username (e.g., `muhfajar.md`)
+3. Use this template:
+
+```markdown
+---
+name: Your name 
+bio: Short description of who you are. 
+avatar: https://example.com/avatar.png 
+website: https://mypersonalweb.id
+twitter: https://x.com/username
+instagram: https://instagram.com/username
+threads: https://www.threads.com/@username
+mastodon: https://mastodon.social/@username 
+nostr: https://primal.net/p/nprofileUsername 
+bluesky: https://bsky.app/profile/username.bsky.social 
+linkedin: https://www.linkedin.com/in/username/ 
+---
+
+### About
+
+Anything description you want to add to your profile detail, or a long description of you if you want
+```
+
+Example file for profile live in `apps/muhfajar.md`
+
 4. Commit and open a PR
 
 ### Platform Values

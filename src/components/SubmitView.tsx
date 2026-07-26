@@ -20,7 +20,8 @@ const DEFAULT_TEMPLATE = `---
 name: App Name
 tagline: A brief, inspiring one-sentence tagline.
 developer: Your Name or Studio
-creator_link: https://yourwebsite.com, https://x.com/username, or https://github.com/username
+developer_url: https://yourwebsite.com or https://x.com/username
+linked_profile: your-developer-slug
 website: https://your-app.com
 platform: web
 category: Productivity
@@ -44,6 +45,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
     const [builderTagline, setBuilderTagline] = useState('The minimalist tool for deep focus.');
     const [builderDev, setBuilderDev] = useState('Maker Name');
     const [builderDevUrl, setBuilderDevUrl] = useState('https://x.com/maker');
+    const [builderLinkedProfile, setBuilderLinkedProfile] = useState('');
     const [builderWeb, setBuilderWeb] = useState('https://myapp.dev');
     const [builderPlatform] = useState('web');
     const [builderCategory, setBuilderCategory] = useState<CategoryType>('Productivity');
@@ -62,7 +64,8 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
         name: builderName,
         tagline: builderTagline,
         developer: builderDev,
-        creator_link: builderDevUrl,
+        developer_url: builderDevUrl,
+        linked_profile: builderLinkedProfile || undefined,
         website: builderWeb,
         platform: builderPlatform,
         category: builderCategory,
@@ -201,17 +204,32 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-xs font-mono text-[#888888] mb-1">
-                                    Creator Link (Personal website, X/Twitter, GitHub, or preferred social account)
-                                </label>
-                                <input
-                                    type="text"
-                                    value={builderDevUrl}
-                                    onChange={(e) => setBuilderDevUrl(e.target.value)}
-                                    placeholder="https://yourwebsite.com, https://x.com/handle, or https://github.com/profile"
-                                    className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
-                                />
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1">
+                                        Developer URL
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={builderDevUrl}
+                                        onChange={(e) => setBuilderDevUrl(e.target.value)}
+                                        placeholder="https://yourwebsite.com or https://x.com/handle"
+                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1">
+                                        Developer profile slug (optional)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={builderLinkedProfile}
+                                        onChange={(e) => setBuilderLinkedProfile(e.target.value)}
+                                        placeholder="e.g. fajar"
+                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    />
+                                </div>
                             </div>
 
                             <div>

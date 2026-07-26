@@ -1,14 +1,15 @@
 ---
 name: weeknd.dev
 tagline: Curated directory of indie software, built by makers for makers.
-developer: weeknd.dev
+developer: Fajar 
 website: https://weeknd.dev
 platform: web
 category: Social 
-icon: https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=256&q=80
+icon: https://weeknd.dev/android-chrome-144x144.png 
 screenshots:
   - https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80
-github: https://github.com/your-username/weeknd
+developer_url: /dev/muhfajar
+linked_profile: muhfajar
 twitter:
 created_at: 2026-07-26
 ---
@@ -16,6 +17,8 @@ created_at: 2026-07-26
 ### A searchable, filterable directory of indie-built apps
 
 weeknd.dev collects indie software into one place. Each app lives as a markdown file — add a file, the directory updates. No database, no API, no build pipeline for content.
+
+A curated directory of indie software, built by makers for makers.
 
 #### Highlights
 - **Markdown-Driven Content**: Add an app by creating a `.md` file in `/apps`. Frontmatter handles metadata, markdown handles description.

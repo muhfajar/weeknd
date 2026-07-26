@@ -17,7 +17,9 @@ export interface AppFrontmatter {
     name: string;
     tagline: string;
     developer: string;
+    developer_url?: string;
     developerUrl?: string;
+    linked_profile?: string;
     website: string;
     platform: string;
     category: string;
@@ -27,8 +29,6 @@ export interface AppFrontmatter {
     screenshots?: string[];
     ios?: string;
     android?: string;
-    creator_link?: string;
-    twitter?: string;
     created_at?: string;
     date_added?: string;
     date?: string;

@@ -34,21 +34,35 @@ export function parseMarkdown(rawMarkdown: string): ParsedMarkdown {
         console.error('Failed to parse YAML frontmatter:', err);
     }
 
-    const creatorLinkVal =
-        parsedYaml.creator_link ||
-        (parsedYaml as Record<string, any>).developer_url ||
-        parsedYaml.developerUrl ||
-        (parsedYaml as Record<string, any>).developer_link ||
-        parsedYaml.twitter ||
-        (parsedYaml as Record<string, any>).github ||
-        undefined;
+    const linkedProfile = parsedYaml.linked_profile
+        ? String(parsedYaml.linked_profile).trim().replace(/^\/dev\//, '').replace(/^dev\//, '').replace(/\.md$/, '')
+        : undefined;
+
+    let devUrlVal: string | undefined;
+    if (linkedProfile) {
+        devUrlVal = linkedProfile;
+    } else {
+        const rawDevUrl =
+            (parsedYaml as Record<string, any>).developer_url ||
+            parsedYaml.developerUrl ||
+            (parsedYaml as Record<string, any>).creator_link ||
+            (parsedYaml as Record<string, any>).developer_link ||
+            undefined;
+
+        if (rawDevUrl && (rawDevUrl.startsWith('/dev/') || rawDevUrl.startsWith('dev/'))) {
+            devUrlVal = rawDevUrl.replace(/^\/dev\//, '').replace(/^dev\//, '');
+        } else {
+            devUrlVal = rawDevUrl;
+        }
+    }
 
     const frontmatter: AppFrontmatter = {
         name: parsedYaml.name || 'Untitled App',
         tagline: parsedYaml.tagline || '',
         developer: parsedYaml.developer || 'Anonymous',
-        creator_link: creatorLinkVal,
-        developerUrl: creatorLinkVal,
+        developer_url: devUrlVal,
+        developerUrl: devUrlVal,
+        linked_profile: linkedProfile,
         website: parsedYaml.website || '#',
         platform: parsedYaml.platform || 'web',
         category: parsedYaml.category || 'Utilities',
@@ -59,7 +73,6 @@ export function parseMarkdown(rawMarkdown: string): ParsedMarkdown {
         screenshots: Array.isArray(parsedYaml.screenshots) ? parsedYaml.screenshots : [],
         ios: parsedYaml.ios || undefined,
         android: parsedYaml.android || undefined,
-        twitter: parsedYaml.twitter || undefined,
         created_at: (parsedYaml as Record<string, any>).created_at
             ? String((parsedYaml as Record<string, any>).created_at)
             : (parsedYaml as Record<string, any>).date_added
@@ -86,7 +99,8 @@ export function generateMarkdownString(
         name: data.name || '',
         tagline: data.tagline || '',
         developer: data.developer || '',
-        creator_link: data.creator_link || data.developerUrl || (data as Record<string, any>).developer_url || '',
+        developer_url: data.developer_url || data.developerUrl || (data as Record<string, any>).creator_link || '',
+        linked_profile: data.linked_profile || undefined,
         website: data.website || '',
         platform: (data.platform || 'web').toLowerCase(),
         category: data.category || 'Utilities',
