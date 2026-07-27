@@ -15,6 +15,7 @@ import {
 import {motion, AnimatePresence} from 'motion/react';
 import {AppItem} from '../types/app';
 import {MarkdownRenderer} from './MarkdownRenderer';
+import {parsePlatforms, formatPlatformLabel} from '../lib/apps';
 
 interface AppDetailModalProps {
     app: AppItem | null;
@@ -144,15 +145,17 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
 
                                         {/* Category & Platform */}
                                         <div
-                                            className="flex items-center gap-2 mt-2.5 text-xs font-mono text-[#666666]">
+                                            className="flex items-center gap-2 mt-2.5 text-xs font-mono text-[#666666] flex-wrap">
                                             <span
                                                 className="px-2 py-0.5 rounded bg-[#1E1E1E] text-zinc-300 border border-[#333333]">
                                                 {app.category}
                                             </span>
-                                            <span
-                                                className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
-                                                {app.platform}
-                                            </span>
+                                            {parsePlatforms(app.platform).map((pToken) => (
+                                                <span key={pToken}
+                                                      className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
+                                                    {formatPlatformLabel(pToken)}
+                                                </span>
+                                            ))}
                                         </div>
 
                                         {/* Action Links directly under App Category */}

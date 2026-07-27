@@ -7,6 +7,7 @@ export type CategoryType =
     | 'Travel'
     | 'Developer Tools'
     | 'Design'
+    | 'Video Editing'
     | 'Finance'
     | 'Health'
     | 'Social'

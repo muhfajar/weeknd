@@ -87,6 +87,28 @@ function getAppTime(app: AppItem): number {
     return isNaN(t) ? 0 : t;
 }
 
+export function parsePlatforms(platformStr?: string): string[] {
+    if (!platformStr) return ['web'];
+    const list = platformStr
+        .split(',')
+        .map((p) => p.trim())
+        .filter((p) => p.length > 0);
+    return list.length > 0 ? list : ['web'];
+}
+
+export function formatPlatformLabel(token: string): string {
+    const p = token.toLowerCase();
+    if (p === 'macos' || p === 'mac') return 'macOS';
+    if (p === 'windows' || p === 'win') return 'Windows';
+    if (p === 'linux') return 'Linux';
+    if (p === 'ios') return 'iOS';
+    if (p === 'android') return 'Android';
+    if (p === 'web') return 'Web';
+    if (p === 'mobile') return 'Mobile';
+    if (p === 'desktop') return 'Desktop';
+    return token.charAt(0).toUpperCase() + token.slice(1);
+}
+
 export function filterAndSortApps(
     apps: AppItem[],
     options: {
@@ -120,28 +142,31 @@ export function filterAndSortApps(
 
     // Platform filter
     if (platform && platform !== 'all') {
-        const p = platform.toLowerCase();
+        const filterPlat = platform.toLowerCase();
         result = result.filter((a) => {
-            const appPlat = a.platform.toLowerCase();
-            if (p === 'macos' || p === 'mac') {
-                return appPlat === 'macos' || appPlat === 'mac' || appPlat.includes('mac') || appPlat.includes('desktop');
-            }
-            if (p === 'windows') {
-                return appPlat === 'windows' || appPlat.includes('win') || appPlat.includes('desktop');
-            }
-            if (p === 'linux') {
-                return appPlat === 'linux' || appPlat.includes('linux') || appPlat.includes('desktop');
-            }
-            if (p === 'ios') {
-                return appPlat.includes('ios') || appPlat.includes('mobile') || !!a.ios;
-            }
-            if (p === 'android') {
-                return appPlat.includes('android') || appPlat.includes('mobile') || !!a.android;
-            }
-            if (p === 'web') {
-                return appPlat.includes('web') || appPlat === '' || appPlat === 'all';
-            }
-            return appPlat.includes(p);
+            const appPlatforms = parsePlatforms(a.platform).map((p) => p.toLowerCase());
+
+            return appPlatforms.some((appPlat) => {
+                if (filterPlat === 'macos' || filterPlat === 'mac') {
+                    return appPlat === 'macos' || appPlat === 'mac' || appPlat.includes('mac') || appPlat.includes('desktop');
+                }
+                if (filterPlat === 'windows') {
+                    return appPlat === 'windows' || appPlat.includes('win') || appPlat.includes('desktop');
+                }
+                if (filterPlat === 'linux') {
+                    return appPlat === 'linux' || appPlat.includes('linux') || appPlat.includes('desktop');
+                }
+                if (filterPlat === 'ios') {
+                    return appPlat.includes('ios') || appPlat.includes('mobile') || !!a.ios;
+                }
+                if (filterPlat === 'android') {
+                    return appPlat.includes('android') || appPlat.includes('mobile') || !!a.android;
+                }
+                if (filterPlat === 'web') {
+                    return appPlat.includes('web') || appPlat === 'all';
+                }
+                return appPlat.includes(filterPlat);
+            });
         });
     }
 
@@ -197,6 +222,7 @@ export const CATEGORIES: CategoryType[] = [
     'Travel',
     'Developer Tools',
     'Design',
+    'Video Editing',
     'Finance',
     'Health',
     'Social',
