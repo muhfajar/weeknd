@@ -78,6 +78,7 @@ weeknd/
 
 1. Fork the repo
 2. Create a new markdown file in `apps/` named after your app (e.g., `my-app.md`)
+3. developer_url = fallback when linked_profile is not found 
 3. Use this template:
 
 ```markdown
@@ -91,10 +92,10 @@ category: Productivity
 icon: https://example.com/icon.png
 screenshots:
   - https://example.com/screenshot1.png
-ios:
-android:
-github: https://github.com/you/my-app
-twitter: https://x.com/you
+ios: https://apps.apple.com/id/app/app_sample
+android: https://play.google.com/store/apps/details?id=app_sample 
+developer_url: https://github.com/muhfajar/weeknd
+linked_profile: file_name_of_dev_without_extension
 created_at: 2026-07-26
 ---
 
