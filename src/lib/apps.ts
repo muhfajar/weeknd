@@ -123,10 +123,25 @@ export function filterAndSortApps(
         const p = platform.toLowerCase();
         result = result.filter((a) => {
             const appPlat = a.platform.toLowerCase();
-            if (p === 'mobile') {
-                return appPlat === 'mobile' || appPlat === 'ios' || appPlat === 'android' || !!a.ios || !!a.android;
+            if (p === 'macos' || p === 'mac') {
+                return appPlat === 'macos' || appPlat === 'mac' || appPlat.includes('mac') || appPlat.includes('desktop');
             }
-            return appPlat.includes(p) || (p === 'ios' && !!a.ios) || (p === 'android' && !!a.android);
+            if (p === 'windows') {
+                return appPlat === 'windows' || appPlat.includes('win') || appPlat.includes('desktop');
+            }
+            if (p === 'linux') {
+                return appPlat === 'linux' || appPlat.includes('linux') || appPlat.includes('desktop');
+            }
+            if (p === 'ios') {
+                return appPlat.includes('ios') || appPlat.includes('mobile') || !!a.ios;
+            }
+            if (p === 'android') {
+                return appPlat.includes('android') || appPlat.includes('mobile') || !!a.android;
+            }
+            if (p === 'web') {
+                return appPlat.includes('web') || appPlat === '' || appPlat === 'all';
+            }
+            return appPlat.includes(p);
         });
     }
 
@@ -179,20 +194,23 @@ export const CATEGORIES: CategoryType[] = [
     'All',
     'AI',
     'Productivity',
-    'Developer Tools',
     'Travel',
+    'Developer Tools',
+    'Design',
     'Finance',
-    'Lifestyle',
+    'Health',
+    'Social',
+    'Entertainment',
     'Education',
     'Utilities',
-    'Entertainment',
-    'Social',
 ];
 
 export const PLATFORMS: { id: PlatformType; label: string }[] = [
     {id: 'all', label: 'All'},
     {id: 'web', label: 'Web'},
-    {id: 'mobile', label: 'Mobile'},
     {id: 'ios', label: 'iOS'},
     {id: 'android', label: 'Android'},
+    {id: 'macos', label: 'macOS'},
+    {id: 'windows', label: 'Windows'},
+    {id: 'linux', label: 'Linux'},
 ];

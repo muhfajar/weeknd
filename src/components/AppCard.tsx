@@ -17,13 +17,29 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
         let label = app.platform;
         let Icon = Globe;
 
-        if (p.includes('ios') || p.includes('mobile') || p.includes('android')) {
+        if (p === 'macos' || p === 'mac' || p.includes('mac')) {
+            Icon = Monitor;
+            label = 'macOS';
+        } else if (p === 'windows' || p.includes('win')) {
+            Icon = Monitor;
+            label = 'Windows';
+        } else if (p === 'linux' || p.includes('linux')) {
+            Icon = Monitor;
+            label = 'Linux';
+        } else if (p.includes('ios')) {
             Icon = Smartphone;
-            label = p.includes('ios') ? 'iOS' : p.includes('android') ? 'Android' : 'Mobile';
-        } else if (p.includes('desktop') || p.includes('mac')) {
+            label = 'iOS';
+        } else if (p.includes('android')) {
+            Icon = Smartphone;
+            label = 'Android';
+        } else if (p.includes('mobile')) {
+            Icon = Smartphone;
+            label = 'Mobile';
+        } else if (p.includes('desktop')) {
             Icon = Monitor;
             label = 'Desktop';
         } else {
+            Icon = Globe;
             label = 'Web';
         }
 

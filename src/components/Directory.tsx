@@ -14,7 +14,7 @@ import {AppItem, CategoryType, PlatformType, SortOption} from '../types/app';
 import {CATEGORIES, PLATFORMS, filterAndSortApps} from '../lib/apps';
 import {AppCard} from './AppCard';
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 interface DirectoryProps {
     apps: AppItem[];
@@ -104,10 +104,25 @@ export const Directory: React.FC<DirectoryProps> = ({
         if (platformId === 'all') return apps.length;
         return apps.filter((a) => {
             const p = a.platform.toLowerCase();
-            if (platformId === 'mobile') {
-                return p === 'mobile' || p === 'ios' || p === 'android' || !!a.ios || !!a.android;
+            if (platformId === 'macos' || platformId === 'mac') {
+                return p === 'macos' || p === 'mac' || p.includes('mac') || p.includes('desktop');
             }
-            return p.includes(platformId) || (platformId === 'ios' && !!a.ios) || (platformId === 'android' && !!a.android);
+            if (platformId === 'windows') {
+                return p === 'windows' || p.includes('win') || p.includes('desktop');
+            }
+            if (platformId === 'linux') {
+                return p === 'linux' || p.includes('linux') || p.includes('desktop');
+            }
+            if (platformId === 'ios') {
+                return p.includes('ios') || p.includes('mobile') || !!a.ios;
+            }
+            if (platformId === 'android') {
+                return p.includes('android') || p.includes('mobile') || !!a.android;
+            }
+            if (platformId === 'web') {
+                return p.includes('web') || p === '' || p === 'all';
+            }
+            return p.includes(platformId);
         }).length;
     };
 

@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import {generateMarkdownString} from '../lib/markdown';
 import {CategoryType} from '../types/app';
-import {CATEGORIES} from '../lib/apps';
+import {CATEGORIES, PLATFORMS} from '../lib/apps';
 
 interface SubmitViewProps {
     onShowToast: (msg: string) => void;
@@ -23,7 +23,7 @@ developer: Your Name or Studio
 developer_url: https://yourwebsite.com or https://x.com/username
 linked_profile: your-developer-slug
 website: https://your-app.com
-platform: web
+platform: web # web | ios | android | macos | windows | linux
 category: Productivity
 created_at: YYYY-MM-DD
 icon: https://example.com/icon.png
@@ -47,7 +47,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
     const [builderDevUrl, setBuilderDevUrl] = useState('https://x.com/maker');
     const [builderLinkedProfile, setBuilderLinkedProfile] = useState('');
     const [builderWeb, setBuilderWeb] = useState('https://myapp.dev');
-    const [builderPlatform] = useState('web');
+    const [builderPlatform, setBuilderPlatform] = useState('web');
     const [builderCategory, setBuilderCategory] = useState<CategoryType>('Productivity');
     const [builderDesc, setBuilderDesc] = useState('Built on weekends to solve daily workflow friction. Fully customizable, fast, and light.');
     const [builderIcon] = useState('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&q=80');
@@ -115,7 +115,8 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
               </span>
                             <h4 className="font-semibold text-zinc-200">Fork Repository</h4>
                             <p className="text-[#888888] leading-relaxed">
-                                Fork <code className="text-red-400">https://github.com/muhfajar/weeknd</code> on GitHub to your
+                                Fork <code className="text-red-400">https://github.com/muhfajar/weeknd</code> on GitHub
+                                to your
                                 personal account.
                             </p>
                         </div>
@@ -242,7 +243,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div>
                                     <label className="block text-xs font-mono text-[#888888] mb-1">Website URL</label>
                                     <input
@@ -251,6 +252,19 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                                         onChange={(e) => setBuilderWeb(e.target.value)}
                                         className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1">Platform</label>
+                                    <select
+                                        value={builderPlatform}
+                                        onChange={(e) => setBuilderPlatform(e.target.value)}
+                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    >
+                                        {PLATFORMS.filter((p) => p.id !== 'all').map((plat) => (
+                                            <option key={plat.id} value={plat.id}>{plat.label}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div>
