@@ -113,7 +113,7 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
             </div>
 
             {/* Footer: Category & Platform + Visit Button */}
-            <div className="mt-6 pt-4 border-t border-[#262626] flex items-center justify-between gap-2">
+            <div className="mt-6 pt-4 border-t border-[#262626] flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
                     {renderPlatformBadges()}
                     <span
