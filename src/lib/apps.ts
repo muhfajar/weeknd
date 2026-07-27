@@ -109,6 +109,106 @@ export function formatPlatformLabel(token: string): string {
     return token.charAt(0).toUpperCase() + token.slice(1);
 }
 
+export interface PlatformBadge {
+    id: string;
+    label: string;
+    type: 'web' | 'mobile' | 'desktop' | 'multi' | 'other';
+}
+
+export function getMergedPlatformBadges(platformStr?: string): PlatformBadge[] {
+    const rawTokens = parsePlatforms(platformStr);
+    const seen = new Set<string>();
+    const uniqueTokens: string[] = [];
+    for (const t of rawTokens) {
+        const lower = t.toLowerCase();
+        if (!seen.has(lower)) {
+            seen.add(lower);
+            uniqueTokens.push(t);
+        }
+    }
+
+    const webTokens: string[] = [];
+    const mobileTokens: string[] = [];
+    const desktopTokens: string[] = [];
+    const otherTokens: string[] = [];
+
+    for (const token of uniqueTokens) {
+        const p = token.toLowerCase();
+        if (p === 'web') {
+            webTokens.push(token);
+        } else if (p === 'ios' || p === 'android' || p === 'mobile' || p.includes('ios') || p.includes('android') || p.includes('mobile')) {
+            mobileTokens.push(token);
+        } else if (
+            p === 'macos' || p === 'mac' || p === 'windows' || p === 'win' || p === 'linux' || p === 'desktop' ||
+            p.includes('mac') || p.includes('win') || p.includes('linux') || p.includes('desktop')
+        ) {
+            desktopTokens.push(token);
+        } else {
+            otherTokens.push(token);
+        }
+    }
+
+    const hasWeb = webTokens.length > 0;
+    const hasMobile = mobileTokens.length > 0;
+    const hasDesktop = desktopTokens.length > 0;
+    const hasOther = otherTokens.length > 0;
+
+    let singleBadge: PlatformBadge;
+
+    if (hasWeb && hasMobile && hasDesktop) {
+        singleBadge = { id: 'multi', label: 'Cross-Platform', type: 'multi' };
+    } else if (hasWeb && hasMobile) {
+        singleBadge = { id: 'web-mobile', label: 'Web & Mobile', type: 'multi' };
+    } else if (hasWeb && hasDesktop) {
+        singleBadge = { id: 'web-desktop', label: 'Web & Desktop', type: 'multi' };
+    } else if (hasDesktop && hasMobile) {
+        singleBadge = { id: 'desktop-mobile', label: 'Desktop & Mobile', type: 'multi' };
+    } else if (hasWeb) {
+        if (hasOther) {
+            singleBadge = { id: 'web-other', label: `Web & ${formatPlatformLabel(otherTokens[0])}`, type: 'multi' };
+        } else {
+            singleBadge = { id: 'web', label: 'Web', type: 'web' };
+        }
+    } else if (hasMobile) {
+        if (mobileTokens.length > 1) {
+            singleBadge = { id: 'mobile', label: 'Mobile', type: 'mobile' };
+        } else {
+            const token = mobileTokens[0];
+            singleBadge = {
+                id: token.toLowerCase(),
+                label: formatPlatformLabel(token),
+                type: 'mobile',
+            };
+        }
+    } else if (hasDesktop) {
+        if (desktopTokens.length > 1) {
+            singleBadge = { id: 'desktop', label: 'Desktop', type: 'desktop' };
+        } else {
+            const token = desktopTokens[0];
+            singleBadge = {
+                id: token.toLowerCase(),
+                label: formatPlatformLabel(token),
+                type: 'desktop',
+            };
+        }
+    } else if (hasOther) {
+        if (otherTokens.length > 1) {
+            singleBadge = { id: 'multi', label: 'Multi-Platform', type: 'multi' };
+        } else {
+            const token = otherTokens[0];
+            singleBadge = {
+                id: token.toLowerCase(),
+                label: formatPlatformLabel(token),
+                type: 'other',
+            };
+        }
+    } else {
+        singleBadge = { id: 'web', label: 'Web', type: 'web' };
+    }
+
+    return [singleBadge];
+}
+
 export function filterAndSortApps(
     apps: AppItem[],
     options: {
