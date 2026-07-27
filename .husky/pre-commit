@@ -1,0 +1,4 @@
+staged_files=$(git diff --cached --name-only --diff-filter=ACM -- '*.md')
+if [ -n "$staged_files" ]; then
+  echo "$staged_files" | xargs node scripts/validate-markdown.mjs
+fi
