@@ -15,7 +15,7 @@ import {
 import {motion, AnimatePresence} from 'motion/react';
 import {AppItem} from '../types/app';
 import {MarkdownRenderer} from './MarkdownRenderer';
-import {parsePlatforms, formatPlatformLabel, getMergedPlatformBadges} from '../lib/apps';
+import {parsePlatforms, formatPlatformLabel, appendRefUrl} from '../lib/apps';
 
 interface AppDetailModalProps {
     app: AppItem | null;
@@ -150,10 +150,10 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                                 className="px-2 py-0.5 rounded bg-[#1E1E1E] text-zinc-300 border border-[#333333]">
                                                 {app.category}
                                             </span>
-                                            {getMergedPlatformBadges(app.platform).map((badge) => (
-                                                <span key={badge.id}
+                                            {parsePlatforms(app.platform).map((pToken) => (
+                                                <span key={pToken}
                                                       className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
-                                                    {badge.label}
+                                                    {formatPlatformLabel(pToken)}
                                                 </span>
                                             ))}
                                         </div>
@@ -162,7 +162,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                         <div className="flex flex-wrap items-center gap-2 mt-3">
                                             {app.website && (
                                                 <a
-                                                    href={app.website}
+                                                    href={appendRefUrl(app.website)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500 hover:bg-red-400 text-white font-mono font-semibold text-xs transition-colors shadow-md"
@@ -175,7 +175,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
 
                                             {app.ios && (
                                                 <a
-                                                    href={app.ios}
+                                                    href={appendRefUrl(app.ios)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1E1E1E] hover:bg-[#262626] text-zinc-200 border border-[#333333] text-xs font-mono transition-colors"
@@ -188,7 +188,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
 
                                             {app.android && (
                                                 <a
-                                                    href={app.android}
+                                                    href={appendRefUrl(app.android)}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1E1E1E] hover:bg-[#262626] text-zinc-200 border border-[#333333] text-xs font-mono transition-colors"
@@ -278,7 +278,7 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
 
                                         return (
                                             <a
-                                                href={devRef}
+                                                href={appendRefUrl(devRef)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex items-center gap-1.5 text-[#888888] hover:text-white transition-colors"

@@ -109,6 +109,36 @@ export function formatPlatformLabel(token: string): string {
     return token.charAt(0).toUpperCase() + token.slice(1);
 }
 
+export function appendRefUrl(url?: string, ref = 'weeknd.dev'): string {
+    if (!url || url.trim() === '' || url === '#' || url.startsWith('javascript:')) {
+        return url || '';
+    }
+
+    const trimmed = url.trim();
+
+    // Do not append if relative path, mailto, tel, or anchor
+    if (trimmed.startsWith('/') || trimmed.startsWith('#') || trimmed.startsWith('mailto:') || trimmed.startsWith('tel:')) {
+        return trimmed;
+    }
+
+    let fullUrl = trimmed;
+    if (!/^https?:\/\//i.test(fullUrl)) {
+        fullUrl = `https://${fullUrl}`;
+    }
+
+    try {
+        const parsed = new URL(fullUrl);
+        if (!parsed.searchParams.has('ref')) {
+            parsed.searchParams.set('ref', ref);
+        }
+        return parsed.toString();
+    } catch {
+        if (trimmed.includes('ref=')) return trimmed;
+        const separator = trimmed.includes('?') ? '&' : '?';
+        return `${trimmed}${separator}ref=${ref}`;
+    }
+}
+
 export interface PlatformBadge {
     id: string;
     label: string;
@@ -156,22 +186,22 @@ export function getMergedPlatformBadges(platformStr?: string): PlatformBadge[] {
     let singleBadge: PlatformBadge;
 
     if (hasWeb && hasMobile && hasDesktop) {
-        singleBadge = { id: 'multi', label: 'Cross-Platform', type: 'multi' };
+        singleBadge = {id: 'multi', label: 'Cross-Platform', type: 'multi'};
     } else if (hasWeb && hasMobile) {
-        singleBadge = { id: 'web-mobile', label: 'Web & Mobile', type: 'multi' };
+        singleBadge = {id: 'web-mobile', label: 'Web & Mobile', type: 'multi'};
     } else if (hasWeb && hasDesktop) {
-        singleBadge = { id: 'web-desktop', label: 'Web & Desktop', type: 'multi' };
+        singleBadge = {id: 'web-desktop', label: 'Web & Desktop', type: 'multi'};
     } else if (hasDesktop && hasMobile) {
-        singleBadge = { id: 'desktop-mobile', label: 'Desktop & Mobile', type: 'multi' };
+        singleBadge = {id: 'desktop-mobile', label: 'Desktop & Mobile', type: 'multi'};
     } else if (hasWeb) {
         if (hasOther) {
-            singleBadge = { id: 'web-other', label: `Web & ${formatPlatformLabel(otherTokens[0])}`, type: 'multi' };
+            singleBadge = {id: 'web-other', label: `Web & ${formatPlatformLabel(otherTokens[0])}`, type: 'multi'};
         } else {
-            singleBadge = { id: 'web', label: 'Web', type: 'web' };
+            singleBadge = {id: 'web', label: 'Web', type: 'web'};
         }
     } else if (hasMobile) {
         if (mobileTokens.length > 1) {
-            singleBadge = { id: 'mobile', label: 'Mobile', type: 'mobile' };
+            singleBadge = {id: 'mobile', label: 'Mobile', type: 'mobile'};
         } else {
             const token = mobileTokens[0];
             singleBadge = {
@@ -182,7 +212,7 @@ export function getMergedPlatformBadges(platformStr?: string): PlatformBadge[] {
         }
     } else if (hasDesktop) {
         if (desktopTokens.length > 1) {
-            singleBadge = { id: 'desktop', label: 'Desktop', type: 'desktop' };
+            singleBadge = {id: 'desktop', label: 'Desktop', type: 'desktop'};
         } else {
             const token = desktopTokens[0];
             singleBadge = {
@@ -193,7 +223,7 @@ export function getMergedPlatformBadges(platformStr?: string): PlatformBadge[] {
         }
     } else if (hasOther) {
         if (otherTokens.length > 1) {
-            singleBadge = { id: 'multi', label: 'Multi-Platform', type: 'multi' };
+            singleBadge = {id: 'multi', label: 'Multi-Platform', type: 'multi'};
         } else {
             const token = otherTokens[0];
             singleBadge = {
@@ -203,7 +233,7 @@ export function getMergedPlatformBadges(platformStr?: string): PlatformBadge[] {
             };
         }
     } else {
-        singleBadge = { id: 'web', label: 'Web', type: 'web' };
+        singleBadge = {id: 'web', label: 'Web', type: 'web'};
     }
 
     return [singleBadge];

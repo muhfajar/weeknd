@@ -2,6 +2,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
+import {appendRefUrl} from '../lib/apps';
 
 interface MarkdownRendererProps {
     content: string;
@@ -69,9 +70,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
                             {children}
                         </li>
                     ),
-                    a: ({node, children, ...props}) => (
+                    a: ({node, children, href, ...props}) => (
                         <a
                             {...props}
+                            href={appendRefUrl(href)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-red-400 underline decoration-red-500/50 hover:decoration-red-400 hover:text-red-300 transition-colors font-medium"
