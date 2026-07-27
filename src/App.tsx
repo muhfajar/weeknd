@@ -7,7 +7,7 @@ import {DeveloperListView} from './components/DeveloperListView';
 import {DeveloperProfileView} from './components/DeveloperProfileView';
 import {Footer} from './components/Footer';
 import {Toast} from './components/Toast';
-import {getAllApps, getAppBySlug} from './lib/apps';
+import {getAllApps, getAppBySlug, appendRefUrl} from './lib/apps';
 import {getAllDevelopers, getDeveloperBySlug} from './lib/developers';
 import {AppItem} from './types/app';
 import {DeveloperItem} from './types/developer';
@@ -23,7 +23,7 @@ export default function App() {
             const saved = localStorage.getItem('weeknd_theme');
             if (saved === 'light' || saved === 'dark') return saved;
         }
-        return 'light';
+        return 'dark';
     });
 
     useEffect(() => {
@@ -169,7 +169,7 @@ export default function App() {
 
     const handleVisitApp = (app: AppItem) => {
         if (app.website && app.website !== '#') {
-            window.open(app.website, '_blank', 'noopener,noreferrer');
+            window.open(appendRefUrl(app.website), '_blank', 'noopener,noreferrer');
         } else {
             handleSelectApp(app);
         }

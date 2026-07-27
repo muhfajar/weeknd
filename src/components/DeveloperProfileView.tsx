@@ -13,6 +13,7 @@ import {AppItem} from '../types/app';
 import {AppCard} from './AppCard';
 import {MarkdownRenderer} from './MarkdownRenderer';
 import {getAppsForDeveloper} from '../lib/developers';
+import {appendRefUrl} from '../lib/apps';
 
 interface DeveloperProfileViewProps {
     developer: DeveloperItem;
@@ -118,7 +119,7 @@ export const DeveloperProfileView: React.FC<DeveloperProfileViewProps> = ({
                     {/* Website Button */}
                     {developer.website && (
                         <a
-                            href={developer.website}
+                            href={appendRefUrl(developer.website)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-mono font-medium shadow-md transition-all self-start"
@@ -140,7 +141,7 @@ export const DeveloperProfileView: React.FC<DeveloperProfileViewProps> = ({
                             {socials.map((s) => (
                                 <a
                                     key={s.key}
-                                    href={s.url}
+                                    href={appendRefUrl(s.url)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#0A0A0A] hover:bg-[#1f1f1f] border border-[#262626] hover:border-red-500/50 rounded-xl text-xs font-mono text-zinc-200 hover:text-white transition-all shadow-sm"
