@@ -129,7 +129,7 @@ export const Directory: React.FC<DirectoryProps> = ({
     };
 
     return (
-        <section id="directory-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <section id="directory-section" className="w-full lg:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col lg:flex-row gap-8 items-start">
 
                 {/* ================= SIDEBAR (Filter & Intro UI) ================= */}
