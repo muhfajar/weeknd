@@ -1,17 +1,19 @@
-export type PlatformType = 'all' | 'web' | 'mobile' | 'ios' | 'android';
+export type PlatformType = 'all' | 'web' | 'ios' | 'android' | 'macos' | 'windows' | 'linux';
 
 export type CategoryType =
     | 'All'
     | 'AI'
     | 'Productivity'
-    | 'Developer Tools'
     | 'Travel'
+    | 'Developer Tools'
+    | 'Design'
+    | 'Video Editing'
     | 'Finance'
-    | 'Lifestyle'
-    | 'Education'
-    | 'Utilities'
+    | 'Health'
+    | 'Social'
     | 'Entertainment'
-    | 'Social';
+    | 'Education'
+    | 'Utilities';
 
 export interface AppFrontmatter {
     name: string;

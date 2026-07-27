@@ -13,7 +13,6 @@ screenshots:
   - https://storage.getmato.app/assets/sc-04.png
 developer_url: https://github.com/diruuu 
 linked_profile: diruuu
-twitter:
 created_at: 2026-07-27
 ---
 

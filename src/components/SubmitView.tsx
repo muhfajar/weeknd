@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import {generateMarkdownString} from '../lib/markdown';
 import {CategoryType} from '../types/app';
-import {CATEGORIES} from '../lib/apps';
+import {CATEGORIES, PLATFORMS} from '../lib/apps';
 
 interface SubmitViewProps {
     onShowToast: (msg: string) => void;
@@ -23,7 +23,7 @@ developer: Your Name or Studio
 developer_url: https://yourwebsite.com or https://x.com/username
 linked_profile: your-developer-slug
 website: https://your-app.com
-platform: web
+platform: web # web | ios | android | macos | windows | linux
 category: Productivity
 created_at: YYYY-MM-DD
 icon: https://example.com/icon.png
@@ -47,7 +47,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
     const [builderDevUrl, setBuilderDevUrl] = useState('https://x.com/maker');
     const [builderLinkedProfile, setBuilderLinkedProfile] = useState('');
     const [builderWeb, setBuilderWeb] = useState('https://myapp.dev');
-    const [builderPlatform] = useState('web');
+    const [builderPlatform, setBuilderPlatform] = useState('web');
     const [builderCategory, setBuilderCategory] = useState<CategoryType>('Productivity');
     const [builderDesc, setBuilderDesc] = useState('Built on weekends to solve daily workflow friction. Fully customizable, fast, and light.');
     const [builderIcon] = useState('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=256&q=80');
@@ -115,7 +115,8 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
               </span>
                             <h4 className="font-semibold text-zinc-200">Fork Repository</h4>
                             <p className="text-[#888888] leading-relaxed">
-                                Fork <code className="text-red-400">https://github.com/muhfajar/weeknd</code> on GitHub to your
+                                Fork <code className="text-red-400">https://github.com/muhfajar/weeknd</code> on GitHub
+                                to your
                                 personal account.
                             </p>
                         </div>
@@ -146,7 +147,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                     <div className="flex flex-wrap items-center gap-3 pt-2">
                         <button
                             onClick={handleCopyTemplate}
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-500 text-white font-mono font-semibold text-xs hover:bg-red-400 transition-colors shadow-sm"
+                            className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-red-500 text-white font-mono font-semibold text-xs hover:bg-red-400 transition-colors shadow-sm"
                         >
                             {copiedTemplate ? <Check className="w-4 h-4"/> : <Copy className="w-4 h-4"/>}
                             <span>{copiedTemplate ? 'Template Copied!' : 'Copy Blank Template'}</span>
@@ -156,7 +157,7 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                             href="https://github.com/muhfajar/weeknd"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1E1E1E] hover:bg-[#262626] text-zinc-200 font-mono text-xs border border-[#333333] transition-colors"
+                            className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-[#1E1E1E] hover:bg-[#262626] text-zinc-200 font-mono text-xs border border-[#333333] transition-colors"
                         >
                             <ExternalLink className="w-4 h-4 text-red-400"/>
                             <span>Open GitHub Repository</span>
@@ -177,36 +178,37 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div className="space-y-6">
 
-                        {/* Inputs */}
-                        <div className="lg:col-span-6 space-y-4">
-                            <div className="grid grid-cols-2 gap-3">
+                        {/* Inputs (Top Section - Full Width) */}
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">App Name</label>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">App
+                                        Name</label>
                                     <input
                                         type="text"
                                         value={builderName}
                                         onChange={(e) => setBuilderName(e.target.value)}
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">Developer /
-                                        Studio</label>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Developer
+                                        / Studio</label>
                                     <input
                                         type="text"
                                         value={builderDev}
                                         onChange={(e) => setBuilderDev(e.target.value)}
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">
                                         Developer URL
                                     </label>
                                     <input
@@ -214,12 +216,12 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                                         value={builderDevUrl}
                                         onChange={(e) => setBuilderDevUrl(e.target.value)}
                                         placeholder="https://yourwebsite.com or https://x.com/handle"
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">
                                         Developer profile slug (optional)
                                     </label>
                                     <input
@@ -227,38 +229,81 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                                         value={builderLinkedProfile}
                                         onChange={(e) => setBuilderLinkedProfile(e.target.value)}
                                         placeholder="e.g. fajar"
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono text-[#888888] mb-1">Tagline</label>
+                                <label
+                                    className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Tagline</label>
                                 <input
                                     type="text"
                                     value={builderTagline}
                                     onChange={(e) => setBuilderTagline(e.target.value)}
-                                    className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">Website URL</label>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Website
+                                        URL</label>
                                     <input
                                         type="text"
                                         value={builderWeb}
                                         onChange={(e) => setBuilderWeb(e.target.value)}
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-mono text-[#888888] mb-1">Category</label>
+                                    <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Platform
+                                        (comma separated)</label>
+                                    <input
+                                        type="text"
+                                        value={builderPlatform}
+                                        onChange={(e) => setBuilderPlatform(e.target.value)}
+                                        placeholder="e.g. web, macos, ios"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    />
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                        {PLATFORMS.filter((p) => p.id !== 'all').map((plat) => {
+                                            const currentList = builderPlatform.split(',').map((s) => s.trim().toLowerCase());
+                                            const active = currentList.includes(plat.id);
+                                            return (
+                                                <button
+                                                    key={plat.id}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        let nextList = [...currentList].filter(Boolean);
+                                                        if (active) {
+                                                            nextList = nextList.filter((x) => x !== plat.id);
+                                                        } else {
+                                                            nextList.push(plat.id);
+                                                        }
+                                                        setBuilderPlatform(nextList.join(', '));
+                                                    }}
+                                                    className={`px-2 py-0.5 rounded text-[11px] font-mono transition-colors border ${
+                                                        active
+                                                            ? 'bg-red-500/20 text-red-300 border-red-500/50'
+                                                            : 'bg-[#0A0A0A] text-[#666666] border-[#262626] hover:text-white'
+                                                    }`}
+                                                >
+                                                    {active ? '✓' : '+'} {plat.label}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label
+                                        className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Category</label>
                                     <select
                                         value={builderCategory}
                                         onChange={(e) => setBuilderCategory(e.target.value as CategoryType)}
-                                        className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                        className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                     >
                                         {CATEGORIES.filter((c) => c !== 'All').map((cat) => (
                                             <option key={cat} value={cat}>{cat}</option>
@@ -268,39 +313,42 @@ export const SubmitView: React.FC<SubmitViewProps> = ({onShowToast}) => {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-mono text-[#888888] mb-1">Description
+                                <label className="block text-xs font-mono text-[#888888] mb-1.5 whitespace-nowrap">Description
                                     (Markdown)</label>
                                 <textarea
                                     rows={4}
                                     value={builderDesc}
                                     onChange={(e) => setBuilderDesc(e.target.value)}
-                                    className="w-full px-3 py-2 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
+                                    className="w-full px-3.5 py-2.5 bg-[#0A0A0A] border border-[#262626] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-red-500/70"
                                 />
                             </div>
                         </div>
 
-                        {/* Generated Markdown Preview */}
+                        {/* Generated Markdown Preview (Bottom Section) */}
                         <div
-                            className="lg:col-span-6 flex flex-col justify-between p-4 rounded-xl bg-[#0A0A0A] border border-[#262626]">
+                            className="flex flex-col justify-between p-4 sm:p-5 rounded-xl bg-[#0A0A0A] border border-[#262626]">
                             <div>
-                                <div className="flex items-center justify-between pb-3 border-b border-[#262626]">
-                  <span className="text-xs font-mono font-semibold text-red-400 flex items-center gap-1.5">
-                    <FileCode className="w-4 h-4"/>
-                    /apps/{builderName ? builderName.toLowerCase().replace(/\s+/g, '-') : 'app'}.md
-                  </span>
+                                <div className="flex flex-col gap-3 pb-3 border-b border-[#262626]">
+                                    <div
+                                        className="flex items-center gap-2 text-xs font-mono font-semibold text-red-400 min-w-0">
+                                        <FileCode className="w-4 h-4 shrink-0"/>
+                                        <span className="truncate">
+                                            /apps/{builderName ? builderName.toLowerCase().replace(/\s+/g, '-') : 'app'}.md
+                                        </span>
+                                    </div>
                                     <button
                                         onClick={handleCopyGenerated}
-                                        className="px-3 py-1 rounded bg-[#1E1E1E] hover:bg-[#262626] text-white text-[11px] font-mono border border-[#333333] flex items-center gap-1 transition-colors"
+                                        className="w-full px-3.5 py-2.5 rounded-lg bg-red-500 hover:bg-red-600 text-white text-xs font-mono font-medium border border-red-500/50 flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.99] cursor-pointer"
                                     >
-                                        <Copy className="w-3 h-3 text-red-400"/>
+                                        <Copy className="w-4 h-4"/>
                                         <span>Copy Output</span>
                                     </button>
                                 </div>
 
                                 <pre
-                                    className="mt-3 text-[11px] font-mono text-[#CCCCCC] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-80">
-                  {generatedMarkdown}
-                </pre>
+                                    className="mt-3 text-[11px] font-mono text-[#CCCCCC] overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-96">
+                                    {generatedMarkdown}
+                                </pre>
                             </div>
 
                             <div

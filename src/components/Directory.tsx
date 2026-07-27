@@ -11,10 +11,10 @@ import {
     ChevronRight,
 } from 'lucide-react';
 import {AppItem, CategoryType, PlatformType, SortOption} from '../types/app';
-import {CATEGORIES, PLATFORMS, filterAndSortApps} from '../lib/apps';
+import {CATEGORIES, PLATFORMS, filterAndSortApps, parsePlatforms} from '../lib/apps';
 import {AppCard} from './AppCard';
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 5;
 
 interface DirectoryProps {
     apps: AppItem[];
@@ -103,11 +103,28 @@ export const Directory: React.FC<DirectoryProps> = ({
     const getPlatformCount = (platformId: string) => {
         if (platformId === 'all') return apps.length;
         return apps.filter((a) => {
-            const p = a.platform.toLowerCase();
-            if (platformId === 'mobile') {
-                return p === 'mobile' || p === 'ios' || p === 'android' || !!a.ios || !!a.android;
-            }
-            return p.includes(platformId) || (platformId === 'ios' && !!a.ios) || (platformId === 'android' && !!a.android);
+            const appPlatforms = parsePlatforms(a.platform).map((p) => p.toLowerCase());
+            return appPlatforms.some((p) => {
+                if (platformId === 'macos' || platformId === 'mac') {
+                    return p === 'macos' || p === 'mac' || p.includes('mac') || p.includes('desktop');
+                }
+                if (platformId === 'windows') {
+                    return p === 'windows' || p.includes('win') || p.includes('desktop');
+                }
+                if (platformId === 'linux') {
+                    return p === 'linux' || p.includes('linux') || p.includes('desktop');
+                }
+                if (platformId === 'ios') {
+                    return p.includes('ios') || p.includes('mobile') || !!a.ios;
+                }
+                if (platformId === 'android') {
+                    return p.includes('android') || p.includes('mobile') || !!a.android;
+                }
+                if (platformId === 'web') {
+                    return p.includes('web') || p === 'all';
+                }
+                return p.includes(platformId);
+            });
         }).length;
     };
 

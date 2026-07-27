@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {ExternalLink, Star, Smartphone, Globe, Monitor, ShieldCheck} from 'lucide-react';
+import {ExternalLink, Star, Smartphone, Globe, Monitor} from 'lucide-react';
 import {AppItem} from '../types/app';
+import {parsePlatforms, formatPlatformLabel} from '../lib/apps';
 
 interface AppCardProps {
     app: AppItem;
@@ -11,29 +12,50 @@ interface AppCardProps {
 export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
     const [imageError, setImageError] = useState(false);
 
-    // Platform icon helper
-    const renderPlatformBadge = () => {
-        const p = app.platform.toLowerCase();
-        let label = app.platform;
-        let Icon = Globe;
+    // Platform badges helper
+    const renderPlatformBadges = () => {
+        const platforms = parsePlatforms(app.platform);
 
-        if (p.includes('ios') || p.includes('mobile') || p.includes('android')) {
-            Icon = Smartphone;
-            label = p.includes('ios') ? 'iOS' : p.includes('android') ? 'Android' : 'Mobile';
-        } else if (p.includes('desktop') || p.includes('mac')) {
-            Icon = Monitor;
-            label = 'Desktop';
-        } else {
-            label = 'Web';
-        }
+        return platforms.map((platToken) => {
+            const p = platToken.toLowerCase();
+            let label = formatPlatformLabel(platToken);
+            let Icon = Globe;
 
-        return (
-            <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono bg-[#141414] border border-[#262626] text-[#888888]">
-        <Icon className="w-3 h-3 text-red-400"/>
-                {label}
-      </span>
-        );
+            if (p === 'macos' || p === 'mac' || p.includes('mac')) {
+                Icon = Monitor;
+                label = 'macOS';
+            } else if (p === 'windows' || p.includes('win')) {
+                Icon = Monitor;
+                label = 'Windows';
+            } else if (p === 'linux' || p.includes('linux')) {
+                Icon = Monitor;
+                label = 'Linux';
+            } else if (p.includes('ios')) {
+                Icon = Smartphone;
+                label = 'iOS';
+            } else if (p.includes('android')) {
+                Icon = Smartphone;
+                label = 'Android';
+            } else if (p.includes('mobile')) {
+                Icon = Smartphone;
+                label = 'Mobile';
+            } else if (p.includes('desktop')) {
+                Icon = Monitor;
+                label = 'Desktop';
+            } else {
+                Icon = Globe;
+                label = 'Web';
+            }
+
+            return (
+                <span
+                    key={platToken}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono bg-[#141414] border border-[#262626] text-[#888888]">
+                    <Icon className="w-3 h-3 text-red-400"/>
+                    {label}
+                </span>
+            );
+        });
     };
 
     return (
@@ -93,7 +115,7 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
             {/* Footer: Category & Platform + Visit Button */}
             <div className="mt-6 pt-4 border-t border-[#262626] flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
-                    {renderPlatformBadge()}
+                    {renderPlatformBadges()}
                     <span
                         className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#141414] border border-[#262626] text-[#888888]">
             {app.category}

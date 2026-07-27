@@ -13,7 +13,6 @@ screenshots:
   - https://cdn.weeknd.dev/pub/img/weeknd/weeknd_dev_submit.jpeg
 developer_url: https://github.com/muhfajar/weeknd 
 linked_profile: muhfajar
-twitter:
 created_at: 2026-07-26
 ---
 
