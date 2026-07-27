@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {ExternalLink, Star, Smartphone, Globe, Monitor} from 'lucide-react';
+import {ExternalLink, Star, Smartphone, Globe, Monitor, Layers} from 'lucide-react';
 import {AppItem} from '../types/app';
-import {parsePlatforms, formatPlatformLabel} from '../lib/apps';
+import {getMergedPlatformBadges} from '../lib/apps';
 
 interface AppCardProps {
     app: AppItem;
@@ -14,45 +14,26 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
 
     // Platform badges helper
     const renderPlatformBadges = () => {
-        const platforms = parsePlatforms(app.platform);
+        const badges = getMergedPlatformBadges(app.platform);
 
-        return platforms.map((platToken) => {
-            const p = platToken.toLowerCase();
-            let label = formatPlatformLabel(platToken);
+        return badges.map((badge) => {
             let Icon = Globe;
-
-            if (p === 'macos' || p === 'mac' || p.includes('mac')) {
-                Icon = Monitor;
-                label = 'macOS';
-            } else if (p === 'windows' || p.includes('win')) {
-                Icon = Monitor;
-                label = 'Windows';
-            } else if (p === 'linux' || p.includes('linux')) {
-                Icon = Monitor;
-                label = 'Linux';
-            } else if (p.includes('ios')) {
+            if (badge.type === 'mobile' || badge.id === 'ios' || badge.id === 'android' || badge.id === 'mobile') {
                 Icon = Smartphone;
-                label = 'iOS';
-            } else if (p.includes('android')) {
-                Icon = Smartphone;
-                label = 'Android';
-            } else if (p.includes('mobile')) {
-                Icon = Smartphone;
-                label = 'Mobile';
-            } else if (p.includes('desktop')) {
+            } else if (badge.type === 'desktop' || badge.id === 'macos' || badge.id === 'windows' || badge.id === 'linux' || badge.id === 'desktop') {
                 Icon = Monitor;
-                label = 'Desktop';
-            } else {
+            } else if (badge.type === 'multi') {
+                Icon = Layers;
+            } else if (badge.type === 'web') {
                 Icon = Globe;
-                label = 'Web';
             }
 
             return (
                 <span
-                    key={platToken}
+                    key={badge.id}
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono bg-[#141414] border border-[#262626] text-[#888888]">
-                    <Icon className="w-3 h-3 text-red-400"/>
-                    {label}
+                    <Icon className="w-3 h-3 text-red-400 shrink-0"/>
+                    {badge.label}
                 </span>
             );
         });
@@ -61,12 +42,12 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
     return (
         <div
             onClick={onClick}
-            className="group relative flex flex-col justify-between p-5 rounded-xl bg-[#141414]/60 border border-[#262626] hover:border-red-500/40 hover:bg-[#141414] transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl hover:shadow-red-950/20"
+            className="group relative flex flex-col justify-between h-full p-5 rounded-xl bg-[#141414]/60 border border-[#262626] hover:border-red-500/40 hover:bg-[#141414] transition-all duration-200 cursor-pointer shadow-sm hover:shadow-xl hover:shadow-red-950/20"
         >
-            <div>
-                {/* Header: Icon + Name + Platform */}
+            <div className="flex-1 flex flex-col">
+                {/* Header: Icon + Name + Developer */}
                 <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                         {/* App Icon */}
                         <div
                             className="relative w-12 h-12 rounded-xl bg-[#1E1E1E] border border-[#333333] overflow-hidden flex items-center justify-center shrink-0 group-hover:border-red-500/50 transition-colors">
@@ -80,26 +61,26 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
                                 />
                             ) : (
                                 <span className="text-lg font-mono font-bold text-red-400 uppercase">
-                  {app.name.charAt(0)}
-                </span>
+                                    {app.name.charAt(0)}
+                                </span>
                             )}
                         </div>
 
                         {/* Title & Developer */}
-                        <div>
+                        <div className="min-w-0">
                             <div className="flex items-center gap-2">
-                                <h3 className="font-mono font-semibold text-white text-base group-hover:text-red-400 transition-colors line-clamp-1">
+                                <h3 className="font-mono font-semibold text-white text-base group-hover:text-red-400 transition-colors truncate">
                                     {app.name}
                                 </h3>
                                 {app.featured && (
                                     <span
-                                        className="p-1 rounded bg-amber-400/10 border border-amber-400/30 text-amber-300"
+                                        className="p-1 rounded bg-amber-400/10 border border-amber-400/30 text-amber-300 shrink-0"
                                         title="Featured App">
-                    <Star className="w-3 h-3 fill-amber-400"/>
-                  </span>
+                                        <Star className="w-3 h-3 fill-amber-400"/>
+                                    </span>
                                 )}
                             </div>
-                            <p className="text-xs font-mono text-[#888888] mt-0.5">
+                            <p className="text-xs font-mono text-[#888888] mt-0.5 truncate">
                                 by <span className="text-zinc-300 font-medium">{app.developer}</span>
                             </p>
                         </div>
@@ -107,19 +88,19 @@ export const AppCard: React.FC<AppCardProps> = ({app, onClick, onVisit}) => {
                 </div>
 
                 {/* Tagline */}
-                <p className="mt-4 text-xs font-mono text-[#CCCCCC] line-clamp-2 leading-relaxed">
+                <p className="mt-4 text-xs font-mono text-[#CCCCCC] line-clamp-2 leading-relaxed min-h-[2.25rem]">
                     {app.tagline}
                 </p>
             </div>
 
             {/* Footer: Category & Platform + Visit Button */}
-            <div className="mt-6 pt-4 border-t border-[#262626] flex items-start justify-between gap-2">
-                <div className="flex items-center gap-2 flex-wrap">
+            <div className="mt-5 pt-4 border-t border-[#262626] flex items-center justify-between gap-2.5">
+                <div className="flex items-center gap-1.5 flex-wrap min-w-0">
                     {renderPlatformBadges()}
                     <span
                         className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#141414] border border-[#262626] text-[#888888]">
-            {app.category}
-          </span>
+                        {app.category}
+                    </span>
                 </div>
 
                 <button

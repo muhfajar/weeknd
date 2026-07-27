@@ -15,7 +15,7 @@ import {
 import {motion, AnimatePresence} from 'motion/react';
 import {AppItem} from '../types/app';
 import {MarkdownRenderer} from './MarkdownRenderer';
-import {parsePlatforms, formatPlatformLabel} from '../lib/apps';
+import {parsePlatforms, formatPlatformLabel, getMergedPlatformBadges} from '../lib/apps';
 
 interface AppDetailModalProps {
     app: AppItem | null;
@@ -150,10 +150,10 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                                 className="px-2 py-0.5 rounded bg-[#1E1E1E] text-zinc-300 border border-[#333333]">
                                                 {app.category}
                                             </span>
-                                            {parsePlatforms(app.platform).map((pToken) => (
-                                                <span key={pToken}
+                                            {getMergedPlatformBadges(app.platform).map((badge) => (
+                                                <span key={badge.id}
                                                       className="px-2 py-0.5 rounded bg-[#1E1E1E] text-red-400 border border-[#333333]">
-                                                    {formatPlatformLabel(pToken)}
+                                                    {badge.label}
                                                 </span>
                                             ))}
                                         </div>
