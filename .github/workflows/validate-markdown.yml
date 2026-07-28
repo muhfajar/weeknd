@@ -1,0 +1,29 @@
+name: Validate Markdown
+
+on:
+  push:
+    paths:
+      - "apps/**/*.md"
+      - "dev/**/*.md"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Stage changed files and run pre-commit validation
+        run: |
+          changed=$(git diff --name-only HEAD~1 HEAD -- 'apps/*.md' 'dev/*.md' || true)
+          if [ -n "$changed" ]; then
+            echo "$changed" | xargs git add
+            bash .husky/pre-commit
+          fi
