@@ -10,7 +10,9 @@ import {
     Check,
     Maximize2,
     Code,
-    User
+    User,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 import {motion, AnimatePresence} from 'motion/react';
 import {AppItem} from '../types/app';
@@ -26,23 +28,47 @@ interface AppDetailModalProps {
 
 export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onShowToast, onSelectDeveloperBySlug}) => {
     const [activeTab, setActiveTab] = useState<'details' | 'raw'>('details');
-    const [selectedScreenshot, setSelectedScreenshot] = useState<string | null>(null);
+    const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState<number>(0);
+    const [selectedScreenshotIndex, setSelectedScreenshotIndex] = useState<number | null>(null);
     const [copiedLink, setCopiedLink] = useState(false);
     const [copiedMd, setCopiedMd] = useState(false);
 
     useEffect(() => {
+        setCurrentScreenshotIndex(0);
+        setSelectedScreenshotIndex(null);
+    }, [app?.slug]);
+
+    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                if (selectedScreenshot) {
-                    setSelectedScreenshot(null);
+                if (selectedScreenshotIndex !== null) {
+                    setSelectedScreenshotIndex(null);
                 } else {
                     onClose();
+                }
+            } else if (app?.screenshots && app.screenshots.length > 1) {
+                if (e.key === 'ArrowLeft') {
+                    if (selectedScreenshotIndex !== null) {
+                        setSelectedScreenshotIndex((prev) =>
+                            prev === null ? 0 : (prev - 1 + app.screenshots.length) % app.screenshots.length
+                        );
+                    } else {
+                        setCurrentScreenshotIndex((prev) => (prev - 1 + app.screenshots.length) % app.screenshots.length);
+                    }
+                } else if (e.key === 'ArrowRight') {
+                    if (selectedScreenshotIndex !== null) {
+                        setSelectedScreenshotIndex((prev) =>
+                            prev === null ? 0 : (prev + 1) % app.screenshots.length
+                        );
+                    } else {
+                        setCurrentScreenshotIndex((prev) => (prev + 1) % app.screenshots.length);
+                    }
                 }
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [onClose, selectedScreenshot]);
+    }, [onClose, selectedScreenshotIndex, app]);
 
     if (!app) return null;
 
@@ -61,11 +87,28 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
         setTimeout(() => setCopiedMd(false), 2000);
     };
 
+    const prevScreenshot = () => {
+        if (!app.screenshots || app.screenshots.length === 0) return;
+        setCurrentScreenshotIndex((prev) => (prev - 1 + app.screenshots.length) % app.screenshots.length);
+    };
+
+    const nextScreenshot = () => {
+        if (!app.screenshots || app.screenshots.length === 0) return;
+        setCurrentScreenshotIndex((prev) => (prev + 1) % app.screenshots.length);
+    };
+
     return (
         <AnimatePresence>
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-zinc-950/80 backdrop-blur-md overflow-y-auto">
+                onClick={(e) => {
+                    if (e.target === e.currentTarget) {
+                        onClose();
+                    }
+                }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-zinc-950/80 backdrop-blur-md overflow-y-auto"
+            >
                 <motion.div
+                    onClick={(e) => e.stopPropagation()}
                     initial={{opacity: 0, scale: 0.96, y: 10}}
                     animate={{opacity: 1, scale: 1, y: 0}}
                     exit={{opacity: 0, scale: 0.96, y: 10}}
@@ -202,34 +245,105 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                                     </div>
                                 </div>
 
-                                {/* Screenshots Gallery */}
+                                {/* Screenshots Carousel */}
                                 {app.screenshots && app.screenshots.length > 0 && (
-                                    <div className="space-y-2">
-                                        <h4 className="text-xs font-mono font-semibold text-[#888888] uppercase tracking-wider">
-                                            Screenshots
-                                        </h4>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {app.screenshots.map((src, idx) => (
-                                                <div
-                                                    key={idx}
-                                                    onClick={() => setSelectedScreenshot(src)}
-                                                    className="group relative rounded-xl overflow-hidden border border-[#262626] bg-[#0A0A0A] aspect-video cursor-pointer hover:border-red-500/50 transition-all"
-                                                >
-                                                    <img
-                                                        src={src}
-                                                        alt={`${app.name} preview ${idx + 1}`}
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                                        loading="lazy"
-                                                    />
-                                                    <div
-                                                        className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="p-2 rounded-full bg-[#141414]/90 text-red-400 border border-[#333333]">
-                              <Maximize2 className="w-4 h-4"/>
-                            </span>
-                                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <h4 className="text-xs font-mono font-semibold text-[#888888] uppercase tracking-wider">
+                                                Screenshots ({currentScreenshotIndex + 1}/{app.screenshots.length})
+                                            </h4>
+                                            {app.screenshots.length > 1 && (
+                                                <div className="flex items-center gap-1">
+                                                    <button
+                                                        onClick={prevScreenshot}
+                                                        className="p-1.5 rounded-md bg-[#1E1E1E] hover:bg-[#262626] text-zinc-300 border border-[#333333] transition-colors"
+                                                        aria-label="Previous screenshot"
+                                                    >
+                                                        <ChevronLeft className="w-4 h-4"/>
+                                                    </button>
+                                                    <button
+                                                        onClick={nextScreenshot}
+                                                        className="p-1.5 rounded-md bg-[#1E1E1E] hover:bg-[#262626] text-zinc-300 border border-[#333333] transition-colors"
+                                                        aria-label="Next screenshot"
+                                                    >
+                                                        <ChevronRight className="w-4 h-4"/>
+                                                    </button>
                                                 </div>
-                                            ))}
+                                            )}
                                         </div>
+
+                                        {/* Main Active Carousel Display */}
+                                        <div
+                                            className="relative group rounded-xl overflow-hidden border border-[#262626] bg-[#0A0A0A] aspect-video">
+                                            <img
+                                                src={app.screenshots[currentScreenshotIndex] || app.screenshots[0]}
+                                                alt={`${app.name} preview ${currentScreenshotIndex + 1}`}
+                                                className="w-full h-full object-cover cursor-pointer"
+                                                onClick={() => setSelectedScreenshotIndex(currentScreenshotIndex)}
+                                            />
+
+                                            {/* Left / Right Nav Overlay Buttons */}
+                                            {app.screenshots.length > 1 && (
+                                                <>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            prevScreenshot();
+                                                        }}
+                                                        className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-zinc-950/70 hover:bg-zinc-900 text-white border border-zinc-700/50 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                                                        aria-label="Previous image"
+                                                    >
+                                                        <ChevronLeft className="w-5 h-5"/>
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            nextScreenshot();
+                                                        }}
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-zinc-950/70 hover:bg-zinc-900 text-white border border-zinc-700/50 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                                                        aria-label="Next image"
+                                                    >
+                                                        <ChevronRight className="w-5 h-5"/>
+                                                    </button>
+                                                </>
+                                            )}
+
+                                            {/* Expand Button */}
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedScreenshotIndex(currentScreenshotIndex);
+                                                }}
+                                                className="absolute top-3 right-3 p-2 rounded-lg bg-zinc-950/70 hover:bg-zinc-900 text-red-400 border border-zinc-700/50 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                                                title="Enlarge screenshot"
+                                            >
+                                                <Maximize2 className="w-4 h-4"/>
+                                            </button>
+                                        </div>
+
+                                        {/* Thumbnail Navigation Bar */}
+                                        {app.screenshots.length > 1 && (
+                                            <div
+                                                className="flex items-center gap-2.5 overflow-x-auto pb-1 pt-0.5 scrollbar-thin">
+                                                {app.screenshots.map((src, idx) => (
+                                                    <button
+                                                        key={idx}
+                                                        onClick={() => setCurrentScreenshotIndex(idx)}
+                                                        className={`relative rounded-lg overflow-hidden border aspect-video w-20 sm:w-24 shrink-0 transition-all ${
+                                                            idx === currentScreenshotIndex
+                                                                ? 'border-red-500 ring-2 ring-red-500/30'
+                                                                : 'border-[#262626] opacity-60 hover:opacity-100'
+                                                        }`}
+                                                    >
+                                                        <img
+                                                            src={src}
+                                                            alt={`Thumbnail ${idx + 1}`}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
@@ -320,23 +434,65 @@ export const AppDetailModal: React.FC<AppDetailModalProps> = ({app, onClose, onS
                 </motion.div>
 
                 {/* Lightbox Modal for Screenshots */}
-                {selectedScreenshot && (
+                {selectedScreenshotIndex !== null && app.screenshots && app.screenshots[selectedScreenshotIndex] && (
                     <div
-                        onClick={() => setSelectedScreenshot(null)}
+                        onClick={() => setSelectedScreenshotIndex(null)}
                         className="fixed inset-0 z-60 bg-zinc-950/90 backdrop-blur-lg flex items-center justify-center p-4"
                     >
-                        <div className="relative max-w-5xl w-full">
-                            <button
-                                onClick={() => setSelectedScreenshot(null)}
-                                className="absolute -top-10 right-0 text-zinc-400 hover:text-zinc-100"
-                            >
-                                <X className="w-6 h-6"/>
-                            </button>
-                            <img
-                                src={selectedScreenshot}
-                                alt="Enlarged screenshot preview"
-                                className="w-full max-h-[80vh] object-contain rounded-xl border border-zinc-800"
-                            />
+                        <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="relative max-w-5xl w-full flex flex-col items-center justify-center"
+                        >
+                            <div className="absolute -top-10 right-0 flex items-center gap-4">
+                                <span className="text-xs font-mono text-zinc-400">
+                                    {selectedScreenshotIndex + 1} / {app.screenshots.length}
+                                </span>
+                                <button
+                                    onClick={() => setSelectedScreenshotIndex(null)}
+                                    className="text-zinc-400 hover:text-zinc-100 p-1"
+                                    aria-label="Close lightbox"
+                                >
+                                    <X className="w-6 h-6"/>
+                                </button>
+                            </div>
+
+                            <div className="relative w-full flex items-center justify-center">
+                                {app.screenshots.length > 1 && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedScreenshotIndex((prev) =>
+                                                prev === null ? 0 : (prev - 1 + app.screenshots.length) % app.screenshots.length
+                                            );
+                                        }}
+                                        className="absolute left-2 sm:-left-12 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-white border border-zinc-700/50 backdrop-blur-md z-10 transition-colors"
+                                        aria-label="Previous image"
+                                    >
+                                        <ChevronLeft className="w-6 h-6"/>
+                                    </button>
+                                )}
+
+                                <img
+                                    src={app.screenshots[selectedScreenshotIndex]}
+                                    alt="Enlarged screenshot preview"
+                                    className="w-full max-h-[80vh] object-contain rounded-xl border border-zinc-800"
+                                />
+
+                                {app.screenshots.length > 1 && (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedScreenshotIndex((prev) =>
+                                                prev === null ? 0 : (prev + 1) % app.screenshots.length
+                                            );
+                                        }}
+                                        className="absolute right-2 sm:-right-12 top-1/2 -translate-y-1/2 p-2 sm:p-3 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-white border border-zinc-700/50 backdrop-blur-md z-10 transition-colors"
+                                        aria-label="Next image"
+                                    >
+                                        <ChevronRight className="w-6 h-6"/>
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}
